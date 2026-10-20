@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>О нас</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" href="data/site.json" as="fetch" crossorigin>
+<link rel="modulepreload" href="js/about.js">
+<link rel="modulepreload" href="js/common.js">
+<link rel="modulepreload" href="js/animations.js">
+<link rel="modulepreload" href="js/icons.js">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="">
+<main class="page">
+  <h1 class="page-title">О нас</h1>
+  <section class="section split flush">
+    <h2 class="section-title">Готовые кухни без долгих согласований</h2>
+    <p class="section-text">Мы собрали каталог готовых планировок: у каждой кухни есть размер, состав и цена. Выбираете подходящую и оформляете заказ в WhatsApp.</p>
+  </section>
+  <section class="section flush">
+    <h2 class="section-title">Как заказать</h2>
+    <div class="step-list" id="steps"></div>
+  </section>
+  <a class="button button-dark" href="catalog.html" data-arrow>Смотреть каталог</a>
+</main>
+<script type="module" src="js/about.js"></script>
+</body>
+</html>

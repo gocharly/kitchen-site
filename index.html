@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кухни</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" href="data/site.json" as="fetch" crossorigin>
+<link rel="preload" href="data/products.json" as="fetch" crossorigin>
+<link rel="modulepreload" href="js/home.js">
+<link rel="modulepreload" href="js/common.js">
+<link rel="modulepreload" href="js/animations.js">
+<link rel="modulepreload" href="js/icons.js">
+<link rel="modulepreload" href="js/tabs.js">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body class="has-dark-hero">
+<main>
+  <section class="hero">
+    <img class="hero-image" src="img/kitchen.jpg" alt="">
+    <div class="hero-content">
+      <h1 class="wordmark" data-site-name></h1>
+      <p class="hero-text">Готовые кухни с ценой, размерами и составом. Заказ в WhatsApp.</p>
+      <a class="button button-light" href="catalog.html" data-arrow>Смотреть каталог</a>
+    </div>
+  </section>
+
+  <section class="section split">
+    <h2 class="section-title">Выберите кухню по форме помещения</h2>
+    <p class="section-text">Прямые, угловые и П-образные кухни. В карточке указаны размер, цена и артикул.</p>
+  </section>
+
+  <section class="section">
+    <div class="section-head">
+      <h2 class="section-title">Каталог</h2>
+      <div class="tabs" id="home-tabs"></div>
+    </div>
+    <div class="tile-grid" id="home-grid"></div>
+    <a class="button button-dark center" href="catalog.html" data-arrow>Все кухни</a>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">Как заказать</h2>
+    <div class="step-list" id="steps"></div>
+  </section>
+
+  <section class="section cta">
+    <img class="cta-image" src="img/kitchen.jpg" alt="">
+    <div class="cta-card">
+      <h2 class="section-title">Подберём кухню под ваше помещение</h2>
+      <p class="section-text">Напишите размеры комнаты, ответим в WhatsApp.</p>
+      <a class="button button-green" data-whatsapp="Здравствуйте! Хочу подобрать кухню.">Написать в WhatsApp</a>
+    </div>
+  </section>
+</main>
+<script type="module" src="js/home.js"></script>
+</body>
+</html>
