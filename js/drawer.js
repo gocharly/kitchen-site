@@ -1,7 +1,7 @@
 import { createElement } from './common.js';
 import { createIcon } from './icons.js';
 
-export function createDrawer() {
+export function createDrawer(onClose) {
   const drawer = createElement('div', 'drawer');
   drawer.setAttribute('role', 'dialog');
   drawer.setAttribute('aria-modal', 'true');
@@ -20,8 +20,10 @@ export function createDrawer() {
   document.body.append(drawer);
 
   const close = () => {
+    if (!drawer.classList.contains('is-open')) return;
     drawer.classList.remove('is-open');
     document.body.classList.remove('is-locked');
+    onClose?.();
   };
   backdrop.addEventListener('click', close);
   closeButton.addEventListener('click', close);

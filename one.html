@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FOCUSKITCHEN</title>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="preload" href="data/site.json" as="fetch" crossorigin>
+<link rel="preload" href="data/products.json" as="fetch" crossorigin>
+<link rel="modulepreload" href="js/onepage.js">
+<link rel="modulepreload" href="js/common.js">
+<link rel="modulepreload" href="js/animations.js">
+<link rel="modulepreload" href="js/icons.js">
+<link rel="modulepreload" href="js/drawer.js">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600&display=block" rel="stylesheet">
+<link rel="stylesheet" href="css/onepage.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="#top" data-site-name></a>
+  <nav class="topbar-nav">
+    <a href="#kitchens">Кухни</a>
+    <a href="#order">Как заказать</a>
+    <a href="#contact">Связаться</a>
+  </nav>
+  <a class="topbar-action" data-whatsapp="Здравствуйте! Хочу подобрать кухню.">Написать</a>
+</header>
+
+<section class="hero" id="top">
+  <img class="hero-image" src="img/products/kukhnya-triniti-2400-kashtan-brauni-mdf-pryamaya/1.jpg" alt="">
+  <div class="hero-content">
+    <h1 class="wordmark" data-site-name></h1>
+    <p class="hero-text">Готовые кухни с ценой, размерами и комплектацией. Выберите модель и закажите в WhatsApp.</p>
+    <a class="button button-light" href="#kitchens" data-arrow>Смотреть кухни</a>
+  </div>
+</section>
+
+<main>
+  <section class="section" id="kitchens">
+    <div class="section-head">
+      <h2 class="section-title">Кухни</h2>
+      <span class="count" id="kitchen-count"></span>
+    </div>
+    <div class="chips" id="shape-chips" role="tablist"></div>
+    <div class="grid" id="kitchen-grid"></div>
+    <button class="button button-dark more" id="show-more" type="button">Показать ещё</button>
+  </section>
+
+  <section class="section" id="order">
+    <h2 class="section-title">Как заказать</h2>
+    <div class="steps" id="steps"></div>
+  </section>
+
+  <section class="section cta" id="contact">
+    <img class="cta-image" src="img/products/kukhnya-memfis-3000-chernyy-tryufel-mdf-pryamaya/1.jpg" alt="">
+    <div class="cta-card">
+      <h2 class="section-title">Подберём кухню под ваше помещение</h2>
+      <p class="section-text">Пришлите размеры комнаты или понравившуюся модель, ответим в WhatsApp.</p>
+      <a class="button button-green" data-whatsapp="Здравствуйте! Хочу подобрать кухню.">Написать в WhatsApp</a>
+      <div class="contact-list" id="contact-list"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-wordmark" data-site-name></div>
+  <div class="footer-bottom">
+    <span id="copyright"></span>
+    <nav class="footer-nav">
+      <a href="#kitchens">Кухни</a>
+      <a href="#order">Как заказать</a>
+      <a href="#contact">Связаться</a>
+    </nav>
+  </div>
+</footer>
+<script type="module" src="js/onepage.js"></script>
+</body>
+</html>
