@@ -130,7 +130,14 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 .review-track::-webkit-scrollbar { display: none; }
 .review { flex: 0 0 82%; max-width: 340px; scroll-snap-align: start; display: flex; gap: 14px; padding: 16px 20px; border-radius: 12px; background: var(--surface); }
 .review-avatar { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: var(--page); color: var(--muted); }
-.review-empty { display: flex; align-items: center; gap: 10px; color: var(--muted); }
+.review-empty { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 24px; border-radius: 16px; background: var(--surface); }
+.review-empty .review-empty-icon { width: 44px; height: 44px; color: var(--accent); }
+.review-empty-title { font-size: 18px; font-weight: 500; }
+.review-empty-note { margin-top: 4px; color: var(--muted); font-size: 14px; max-width: 520px; }
+@media (min-width: 900px) {
+  .review-empty { flex-direction: row; align-items: center; gap: 20px; padding: 24px 28px; }
+  .review-empty-text { flex: 1; }
+}
 .review-author { font-weight: 600; }
 .review-text { margin-top: 6px; }
 .similar-title { margin: 56px 0 20px; }
@@ -234,7 +241,7 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 .icon .f { fill: currentColor; fill-opacity: .16; }
 .icon-button .f { fill-opacity: 1; }
 .step-icon { width: 30px; height: 30px; color: var(--accent); }
-.spec-label .icon, .contact-label .icon, .mobile-menu-contact .icon, .footer-contact .icon, .review-empty .icon { color: var(--accent); }
+.spec-label .icon, .contact-label .icon, .mobile-menu-contact .icon, .footer-contact .icon { color: var(--accent); }
 .spec-label .icon, .contact-label .icon { width: 20px; height: 20px; }
 .tab .icon { width: 18px; height: 18px; color: var(--accent); }
 .tab.is-active .icon { color: #fff; }

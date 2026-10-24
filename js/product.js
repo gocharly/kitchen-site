@@ -66,14 +66,18 @@ function renderReview(review) {
   return card;
 }
 
+function renderReviewsEmpty(item) {
+  const block = createElement('div', 'review-empty');
+  const text = createElement('div', 'review-empty-text');
+  text.append(createElement('span', 'review-empty-title', 'Отзывов пока нет'), createElement('p', 'review-empty-note', 'Купили эту кухню? Расскажите, как её собрали и как она служит. Отзыв появится здесь после публикации.'));
+  block.append(createIcon('message-circle', 'icon review-empty-icon'), text, createWhatsAppLink(site.whatsappPhone, `Здравствуйте! Хочу оставить отзыв о кухне: ${item.title}`, 'button button-green', 'Оставить отзыв'));
+  return block;
+}
+
 function renderReviews(item) {
-  const list = createElement('div', 'review-track');
   const own = reviews.filter((review) => review.productId === item.id);
-  if (!own.length) {
-    const empty = createElement('div', 'review-empty');
-    empty.append(createIcon('message-square'), 'Отзывов пока нет.');
-    list.append(empty);
-  }
+  if (!own.length) return renderReviewsEmpty(item);
+  const list = createElement('div', 'review-track');
   own.forEach((review) => list.append(renderReview(review)));
   startAutoSlide(list);
   return list;
