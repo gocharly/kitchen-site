@@ -112,7 +112,11 @@ function renderMobileMenu(site, activePage, closeMenu) {
   top.append(brand, closeButton);
   const nav = createElement('nav', 'mobile-menu-nav');
   NAV_ITEMS.forEach((item, index) => nav.append(renderMobileLink(item.href, item.label, index, item.href === activePage ? 'is-active' : '')));
-  const shapeRows = Object.entries(SHAPE_LABELS).map(([shape, label], index) => renderMobileLink(`catalog.html?shape=${shape}`, label, index, 'is-small'));
+  const shapeRows = Object.entries(SHAPE_LABELS).map(([shape, label], index) => {
+    const link = renderMobileLink(`catalog.html?shape=${shape}`, label, index, 'is-small');
+    link.dataset.shape = shape;
+    return link;
+  });
   const phoneDigits = (site.phone ?? '').replace(/[^\d+]/g, '');
   const contactRows = [['phone', site.phone, `tel:${phoneDigits}`], ['mail', site.email, `mailto:${site.email}`], ['map-pin', site.address, null]].filter(([, value]) => value).map(([iconName, value, href]) => renderMobileContact(iconName, value, href));
   const order = createWhatsAppLink(site.whatsappPhone, GENERAL_MESSAGE, 'button button-green', 'Написать в WhatsApp');
@@ -121,6 +125,14 @@ function renderMobileMenu(site, activePage, closeMenu) {
   menu.append(order);
   menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
   return menu;
+}
+
+async function hideEmptyShapeLinks(menu) {
+  const { products } = await fetchJson('data/products.json');
+  const presentShapes = new Set(products.map((product) => product.shape));
+  menu.querySelectorAll('[data-shape]').forEach((link) => {
+    if (!presentShapes.has(link.dataset.shape)) link.remove();
+  });
 }
 
 function renderMenuButton(openMenu) {
@@ -144,7 +156,12 @@ function renderHeader(site, activePage) {
     nav.append(link);
   });
   const write = createWhatsAppLink(site.whatsappPhone, GENERAL_MESSAGE, 'header-action', 'Написать');
+  let shapeLinksChecked = false;
   const setMenuOpen = (isOpen) => {
+    if (isOpen && !shapeLinksChecked) {
+      shapeLinksChecked = true;
+      hideEmptyShapeLinks(header.querySelector('.mobile-menu'));
+    }
     header.classList.toggle('is-open', isOpen);
     document.body.classList.toggle('is-locked', isOpen);
   };
