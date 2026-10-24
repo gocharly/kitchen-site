@@ -4,7 +4,7 @@ import { markPageReady } from './animations.js';
 import { createIcon } from './icons.js';
 import { renderTabs } from './tabs.js';
 
-const SPEC_ICONS = { 'Форма': 'shapes', 'Расположение': 'move-horizontal', 'Размер': 'ruler', 'Площадь кухни': 'maximize', 'Фасады': 'door', 'Корпус': 'box', 'Столешница': 'layers', 'Фурнитура': 'sliders', 'Срок изготовления': 'clock', 'Гарантия': 'shield-check', 'Артикул': 'tag' };
+const SPEC_ICONS = { 'Форма': 'shapes', 'Расположение': 'move-horizontal', 'Размер': 'ruler', 'Длина': 'ruler', 'Высота': 'ruler', 'Глубина': 'ruler', 'Глубина со столешницей': 'ruler', 'Площадь кухни': 'maximize', 'Серия': 'layout-grid', 'Стиль': 'shapes', 'Цвет фасада': 'door', 'Цвет корпуса': 'box', 'Материал фасада': 'door', 'Покрытие фасада': 'door', 'Тип поверхности': 'door', 'Материал корпуса': 'box', 'Столешница': 'layers', 'Ручки': 'sliders', 'Доводчики': 'sliders', 'Стеновая панель': 'layers', 'Торцевые фасады': 'door', 'Цена за погонный метр': 'tag', 'Артикул': 'tag' };
 
 const dataRequests = Promise.all([fetchJson('data/products.json'), fetchJson('data/reviews.json')]);
 const site = await mountLayout('catalog.html');
@@ -31,7 +31,7 @@ function renderGallery(images, title) {
     thumb.type = 'button';
     thumb.setAttribute('aria-label', `Фото ${index + 1}`);
     const preview = createElement('img');
-    preview.src = image.src;
+    preview.src = image.thumb ?? image.src;
     preview.alt = '';
     preview.style.objectPosition = image.position;
     thumb.append(preview);

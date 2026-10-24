@@ -12,11 +12,20 @@ function renderPageButton(content, label, isActive, isDisabled, onClick) {
   return button;
 }
 
+function listVisiblePages(pageCount, currentPage) {
+  const wanted = [1, currentPage - 1, currentPage, currentPage + 1, pageCount].filter((page) => page >= 1 && page <= pageCount);
+  return [...new Set(wanted)].sort((first, second) => first - second);
+}
+
 export function renderPagination(container, pageCount, currentPage, onSelect) {
   container.replaceChildren();
   if (pageCount < 2) return;
   const previous = renderPageButton(createIcon('chevron-left'), 'Предыдущая страница', false, currentPage === 1, () => onSelect(currentPage - 1));
   const next = renderPageButton(createIcon('chevron-right'), 'Следующая страница', false, currentPage === pageCount, () => onSelect(currentPage + 1));
-  const numbers = Array.from({ length: pageCount }, (_, index) => index + 1).map((page) => renderPageButton(String(page), `Страница ${page}`, page === currentPage, false, () => onSelect(page)));
-  container.append(previous, ...numbers, next);
+  const items = [];
+  listVisiblePages(pageCount, currentPage).forEach((page, index, pages) => {
+    if (index > 0 && page - pages[index - 1] > 1) items.push(createElement('span', 'page-gap', '…'));
+    items.push(renderPageButton(String(page), `Страница ${page}`, page === currentPage, false, () => onSelect(page)));
+  });
+  container.append(previous, ...items, next);
 }

@@ -15,6 +15,7 @@ export function renderTabs(container, items, activeValue, onSelect) {
   });
 }
 
-export function renderShapeTabs(container, activeShape, onSelect) {
-  renderTabs(container, [['', 'Все'], ...Object.entries(SHAPE_LABELS)], activeShape, onSelect);
+export function renderShapeTabs(container, activeShape, onSelect, availableShapes) {
+  const shapes = Object.entries(SHAPE_LABELS).filter(([shape]) => availableShapes.includes(shape));
+  renderTabs(container, [['', 'Все'], ...shapes], activeShape, onSelect);
 }

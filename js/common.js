@@ -59,7 +59,8 @@ export function renderProductTile(product) {
   const frame = createElement('div', 'tile-image');
   const image = createElement('img');
   const cover = product.images[0];
-  image.src = cover.src;
+  image.src = cover.thumb ?? cover.src;
+  image.decoding = 'async';
   image.alt = product.title;
   image.loading = 'lazy';
   image.style.objectPosition = cover.position;

@@ -11,6 +11,7 @@ const productsRequest = fetchJson('data/products.json');
 await mountLayout('catalog.html');
 const { products } = await productsRequest;
 const params = new URLSearchParams(location.search);
+const availableShapes = [...new Set(products.map((product) => product.shape))];
 let activeShape = params.get('shape') ?? '';
 let activePage = Number(params.get('page')) || 1;
 
@@ -34,7 +35,7 @@ function showCatalog() {
   const start = (activePage - 1) * pageSize;
   document.getElementById('catalog-grid').replaceChildren(...visible.slice(start, start + pageSize).map(renderProductTile));
   document.getElementById('catalog-count').textContent = `${visible.length} шт.`;
-  renderShapeTabs(document.getElementById('catalog-tabs'), activeShape, selectShape);
+  renderShapeTabs(document.getElementById('catalog-tabs'), activeShape, selectShape, availableShapes);
   renderPagination(document.getElementById('catalog-pagination'), pageCount, activePage, selectPage);
   writeAddress();
 }
