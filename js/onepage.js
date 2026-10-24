@@ -2,6 +2,7 @@ import { markPageReady, startRevealOnScroll } from './animations.js';
 import { LAYOUT_LABELS, SHAPE_LABELS, buildWhatsAppLink, createElement, createWhatsAppLink, fetchJson, formatPrice, renderOrderSteps } from './common.js';
 import { createDrawer } from './drawer.js';
 import { createIcon } from './icons.js';
+import { startAutoSlide } from './slider.js';
 
 const PAGE_SIZE_PHONE = 6;
 const PAGE_SIZE_DESKTOP = 8;
@@ -12,10 +13,11 @@ const SPEC_ICONS = { 'Размер': 'ruler', 'Расположение': 'move-
 const desktopQuery = matchMedia('(min-width: 900px)');
 
 startRevealOnScroll();
-const [site, { products }] = await Promise.all([fetchJson('data/site.json'), fetchJson('data/products.json')]);
+const [site, { products }, payment, { reviews }] = await Promise.all([fetchJson('data/site.json'), fetchJson('data/products.json'), fetchJson('data/payment.json'), fetchJson('data/reviews.json')]);
 const availableShapes = Object.keys(SHAPE_LABELS).filter((shape) => products.some((product) => product.shape === shape));
 let activeShape = '';
 let visibleCount = readPageSize();
+const paymentDrawer = createDrawer();
 const drawer = createDrawer(() => history.replaceState(null, '', location.pathname + location.search));
 
 function readPageSize() {
@@ -174,7 +176,85 @@ function openKitchenFromHash() {
   if (product) openKitchen(product);
 }
 
+function formatReviewDate(value) {
+  const date = new Date(value);
+  if (!value || Number.isNaN(date.getTime())) return '';
+  return new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+}
+
+function renderReviewCard(review) {
+  const card = createElement('div', 'review');
+  const avatar = createElement('span', 'review-avatar');
+  avatar.append(createIcon('user'));
+  const meta = createElement('span', 'review-meta');
+  meta.append(createIcon('whatsapp', 'icon icon-button icon-mini'), formatReviewDate(review.date));
+  const body = createElement('div', 'review-body');
+  body.append(createElement('span', 'review-author', review.author), meta, createElement('p', 'review-text', review.text));
+  card.append(avatar, body);
+  return card;
+}
+
+function renderReviewsEmpty() {
+  const block = createElement('div', 'review-empty');
+  const text = createElement('div', 'review-empty-text');
+  text.append(createElement('span', 'review-empty-title', 'Отзывов пока нет'), createElement('p', 'review-empty-note', 'Купили кухню? Расскажите, как её собрали и как она служит. Отзыв появится здесь после публикации.'));
+  block.append(createIcon('message-circle', 'icon review-empty-icon'), text, createWhatsAppLink(site.whatsappPhone, 'Здравствуйте! Хочу оставить отзыв.', 'button button-green', 'Оставить отзыв'));
+  return block;
+}
+
+function renderReviews() {
+  const area = document.getElementById('review-area');
+  if (!reviews.length) return area.append(renderReviewsEmpty());
+  const track = createElement('div', 'review-track');
+  track.append(...reviews.map(renderReviewCard));
+  area.append(track);
+  document.getElementById('review-count').textContent = `${reviews.length}`;
+  if (reviews.length > 1) startAutoSlide(track);
+}
+
+function renderPaymentSteps() {
+  const steps = createElement('div', 'pay-steps');
+  ['Откройте приложение банка', 'Выберите оплату по QR-коду', 'Наведите камеру на код'].forEach((text) => {
+    const row = createElement('span', 'pay-step');
+    row.append(createIcon('check'), text);
+    steps.append(row);
+  });
+  return steps;
+}
+
+function renderPaymentQr() {
+  const block = createElement('div', 'pay-qr');
+  const image = createElement('img');
+  image.src = `${payment.image}?v=${encodeURIComponent(payment.updatedAt ?? '')}`;
+  image.alt = 'QR-код для оплаты';
+  block.append(image);
+  return block;
+}
+
+function renderPaymentSheet() {
+  const sheet = createElement('div', 'pay-sheet');
+  const isReady = payment.enabled && payment.image;
+  sheet.append(createElement('h3', 'sheet-title pay-title', isReady ? 'Оплата по QR' : 'QR для оплаты пока не добавлен'));
+  if (isReady) {
+    sheet.append(renderPaymentQr());
+    if (payment.note) sheet.append(createElement('p', 'pay-note', payment.note));
+    sheet.append(renderPaymentSteps());
+  } else {
+    sheet.append(createElement('p', 'pay-note', 'Напишите нам в WhatsApp, пришлём реквизиты для оплаты.'));
+  }
+  sheet.append(createWhatsAppLink(site.whatsappPhone, 'Здравствуйте! Вопрос по оплате.', 'button button-green pay-chat', 'Написать в WhatsApp'));
+  return sheet;
+}
+
+function setupPaymentButton() {
+  const button = document.getElementById('pay-button');
+  button.append(createIcon('qr-code'), 'Оплата');
+  button.addEventListener('click', () => paymentDrawer.open('Оплата', renderPaymentSheet()));
+}
+
 fillSiteDetails();
+setupPaymentButton();
+renderReviews();
 renderOrderSteps(document.getElementById('steps'));
 renderChips();
 renderGrid();

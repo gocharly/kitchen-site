@@ -7,6 +7,8 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="preload" href="data/site.json" as="fetch" crossorigin>
 <link rel="preload" href="data/products.json" as="fetch" crossorigin>
+<link rel="preload" href="data/payment.json" as="fetch" crossorigin>
+<link rel="preload" href="data/reviews.json" as="fetch" crossorigin>
 <link rel="modulepreload" href="js/onepage.js">
 <link rel="modulepreload" href="js/common.js">
 <link rel="modulepreload" href="js/animations.js">
@@ -23,8 +25,10 @@
   <nav class="topbar-nav">
     <a href="#kitchens">Кухни</a>
     <a href="#order">Как заказать</a>
+    <a href="#reviews">Отзывы</a>
     <a href="#contact">Связаться</a>
   </nav>
+  <button class="topbar-pay" id="pay-button" type="button"></button>
   <a class="topbar-action" data-whatsapp="Здравствуйте! Хочу заказать кухню.">Заказать</a>
 </header>
 
@@ -53,6 +57,14 @@
     <div class="steps" id="steps"></div>
   </section>
 
+  <section class="section" id="reviews">
+    <div class="section-head">
+      <h2 class="section-title">Отзывы</h2>
+      <span class="count" id="review-count"></span>
+    </div>
+    <div id="review-area"></div>
+  </section>
+
   <section class="section cta" id="contact">
     <img class="cta-image" src="img/products/kukhnya-memfis-3000-chernyy-tryufel-mdf-pryamaya/1.jpg" alt="">
     <div class="cta-card">
@@ -71,6 +83,7 @@
     <nav class="footer-nav">
       <a href="#kitchens">Кухни</a>
       <a href="#order">Как заказать</a>
+      <a href="#reviews">Отзывы</a>
       <a href="#contact">Связаться</a>
     </nav>
   </div>
