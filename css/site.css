@@ -255,7 +255,7 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 @media (min-width: 900px) { .pagination { gap: 8px; } .page-button { min-width: 44px; padding: 0 12px; } }
 
 @media (min-width: 900px) {
-  .product-layout { gap: 24px 56px; grid-template-areas: 'gallery info' 'description info'; grid-template-rows: auto 1fr; }
+  .product-layout { gap: 24px 56px; grid-template-areas: 'gallery info' 'description description'; }
   .product-layout .gallery { grid-area: gallery; }
   .product-info { grid-area: info; }
   .product-description { grid-area: description; }
@@ -288,3 +288,6 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 .drawer .spec-card { display: block; padding: 8px 20px; }
 .drawer .spec-row { grid-template-columns: 150px 1fr; gap: 12px; padding: 10px 0; }
 .drawer .review-track { margin: 0; padding: 0; }
+
+.reviews-section { margin-top: 48px; }
+.reviews-section .section-title { margin-bottom: 20px; font-size: 20px; }

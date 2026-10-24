@@ -94,13 +94,16 @@ function renderDrawerTrigger(drawer, { iconName, label, heading, buildContent })
 }
 
 function renderDrawerTriggers(item, drawer) {
-  const reviewCount = reviews.filter((review) => review.productId === item.id).length;
   const triggers = createElement('div', 'drawer-triggers');
-  triggers.append(
-    renderDrawerTrigger(drawer, { iconName: 'list', label: 'Характеристики', heading: 'Характеристики', buildContent: () => renderSpecs(item) }),
-    renderDrawerTrigger(drawer, { iconName: 'message-square', label: reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы', heading: 'Отзывы', buildContent: () => renderReviews(item) }),
-  );
+  triggers.append(renderDrawerTrigger(drawer, { iconName: 'list', label: 'Характеристики', heading: 'Характеристики', buildContent: () => renderSpecs(item) }));
   return triggers;
+}
+
+function renderReviewsSection(item) {
+  const reviewCount = reviews.filter((review) => review.productId === item.id).length;
+  const section = createElement('section', 'reviews-section');
+  section.append(createElement('h2', 'section-title', reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы'), renderReviews(item));
+  return section;
 }
 
 function renderMissing() {
@@ -128,7 +131,7 @@ function renderProduct(item) {
   layout.append(renderGallery(item.images, item.title), info);
   if (item.description) layout.append(renderDescription(item.description));
   const similar = products.filter((other) => other.id !== item.id && other.shape === item.shape);
-  root.append(crumbs, layout);
+  root.append(crumbs, layout, renderReviewsSection(item));
   if (!similar.length) return;
   const grid = createElement('div', 'tile-grid');
   grid.append(...similar.slice(0, 4).map(renderProductTile));
