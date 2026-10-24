@@ -2,7 +2,7 @@ import { LAYOUT_LABELS, SHAPE_LABELS, buildProductMessage, createElement, create
 import { startAutoSlide } from './slider.js';
 import { markPageReady } from './animations.js';
 import { createIcon } from './icons.js';
-import { renderTabs } from './tabs.js';
+import { createDrawer } from './drawer.js';
 
 const SPEC_ICONS = { 'Форма': 'shapes', 'Расположение': 'move-horizontal', 'Размер': 'ruler', 'Длина': 'ruler', 'Высота': 'ruler', 'Глубина': 'ruler', 'Глубина со столешницей': 'ruler', 'Площадь кухни': 'maximize', 'Серия': 'layout-grid', 'Стиль': 'shapes', 'Цвет фасада': 'door', 'Цвет корпуса': 'box', 'Материал фасада': 'door', 'Покрытие фасада': 'door', 'Тип поверхности': 'door', 'Материал корпуса': 'box', 'Столешница': 'layers', 'Ручки': 'sliders', 'Доводчики': 'sliders', 'Стеновая панель': 'layers', 'Торцевые фасады': 'door', 'Цена за погонный метр': 'tag', 'Артикул': 'tag' };
 
@@ -85,20 +85,22 @@ function renderDescription(text) {
   return block;
 }
 
-function renderDetails(item) {
-  const details = createElement('div', 'details');
-  const tabs = createElement('div', 'tabs');
-  tabs.setAttribute('role', 'tablist');
-  const body = createElement('div', 'details-body');
+function renderDrawerTrigger(drawer, { iconName, label, heading, buildContent }) {
+  const trigger = createElement('button', 'drawer-trigger');
+  trigger.type = 'button';
+  trigger.append(createIcon(iconName), createElement('span', 'drawer-trigger-label', label), createIcon('chevron-right'));
+  trigger.addEventListener('click', () => drawer.open(heading, buildContent()));
+  return trigger;
+}
+
+function renderDrawerTriggers(item, drawer) {
   const reviewCount = reviews.filter((review) => review.productId === item.id).length;
-  const items = [['specs', 'Характеристики', 'list'], ['reviews', reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы', 'message-square']];
-  const show = (value) => {
-    renderTabs(tabs, items, value, show);
-    body.replaceChildren(value === 'specs' ? renderSpecs(item) : renderReviews(item));
-  };
-  show('specs');
-  details.append(tabs, body);
-  return details;
+  const triggers = createElement('div', 'drawer-triggers');
+  triggers.append(
+    renderDrawerTrigger(drawer, { iconName: 'list', label: 'Характеристики', heading: 'Характеристики', buildContent: () => renderSpecs(item) }),
+    renderDrawerTrigger(drawer, { iconName: 'message-square', label: reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы', heading: 'Отзывы', buildContent: () => renderReviews(item) }),
+  );
+  return triggers;
 }
 
 function renderMissing() {
@@ -120,7 +122,7 @@ function renderProduct(item) {
   info.append(createElement('h1', 'product-title', item.title), createElement('div', 'product-price', formatPrice(item.price)));
   const orderBar = createElement('div', 'order-bar');
   orderBar.append(order);
-  info.append(orderBar, renderDetails(item));
+  info.append(orderBar, renderDrawerTriggers(item, createDrawer()));
   document.body.classList.add('has-order-bar');
   const layout = createElement('div', 'product-layout');
   layout.append(renderGallery(item.images, item.title), info);
