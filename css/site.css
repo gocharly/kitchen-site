@@ -102,7 +102,7 @@ h1, h2, p { margin: 0; }
 .contact-list { display: grid; gap: 8px; }
 .contact-row { display: grid; grid-template-columns: 130px 1fr; align-items: center; padding: 14px 16px; border-radius: 12px; background: var(--surface); }
 .spec-card { padding: 8px 20px; border-radius: 16px; background: var(--surface); }
-.spec-row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 12px; padding: 12px 0; }
+.spec-row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 12px; padding: 9px 0; }
 .spec-label, .contact-label { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; }
 .spec-label .icon, .contact-label .icon { width: 18px; height: 18px; }
 .spec-value { font-size: 15px; font-weight: 500; }
@@ -124,7 +124,7 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 .order-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom)); background: var(--page); }
 .order-bar .button { width: 100%; margin: 0; min-height: 52px; font-size: 15px; }
 .has-order-bar { padding-bottom: 72px; }
-.details { margin-top: 40px; }
+.details { width: 100%; margin-top: 12px; }
 .details-body { margin-top: 16px; max-width: 720px; min-width: 0; }
 .review-track { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 var(--gutter); scrollbar-width: none; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter); }
 .review-track::-webkit-scrollbar { display: none; }
@@ -253,3 +253,17 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 .details-body .section-text { white-space: pre-line; margin-top: 16px; max-width: none; }
 
 @media (min-width: 900px) { .pagination { gap: 8px; } .page-button { min-width: 44px; padding: 0 12px; } }
+
+@media (min-width: 900px) {
+  .product-layout { gap: 24px 56px; grid-template-areas: 'gallery info' 'description info'; grid-template-rows: auto 1fr; }
+  .product-layout .gallery { grid-area: gallery; }
+  .product-info { grid-area: info; }
+  .product-description { grid-area: description; }
+  .product-info { align-self: start; }
+  .spec-card { display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px; padding: 12px 24px; }
+  .spec-row { grid-template-columns: 1fr; gap: 2px; padding: 10px 0; }
+  .review-track { margin: 0; padding: 0; }
+}
+
+.product-description .section-text { white-space: pre-line; max-width: none; margin-top: 12px; font-size: 14px; }
+.product-description .section-title { font-size: 20px; }

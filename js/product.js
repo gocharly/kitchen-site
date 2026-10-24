@@ -79,9 +79,10 @@ function renderReviews(item) {
   return list;
 }
 
-function renderSpecSection(item) {
-  const description = item.description ? [createElement('p', 'section-text', item.description)] : [];
-  return [renderSpecs(item), ...description];
+function renderDescription(text) {
+  const block = createElement('div', 'product-description');
+  block.append(createElement('h2', 'section-title', 'Описание'), createElement('p', 'section-text', text));
+  return block;
 }
 
 function renderDetails(item) {
@@ -93,7 +94,7 @@ function renderDetails(item) {
   const items = [['specs', 'Характеристики', 'list'], ['reviews', reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы', 'message-square']];
   const show = (value) => {
     renderTabs(tabs, items, value, show);
-    body.replaceChildren(...(value === 'specs' ? renderSpecSection(item) : [renderReviews(item)]));
+    body.replaceChildren(value === 'specs' ? renderSpecs(item) : renderReviews(item));
   };
   show('specs');
   details.append(tabs, body);
@@ -119,12 +120,13 @@ function renderProduct(item) {
   info.append(createElement('h1', 'product-title', item.title), createElement('div', 'product-price', formatPrice(item.price)));
   const orderBar = createElement('div', 'order-bar');
   orderBar.append(order);
-  info.append(orderBar);
+  info.append(orderBar, renderDetails(item));
   document.body.classList.add('has-order-bar');
   const layout = createElement('div', 'product-layout');
   layout.append(renderGallery(item.images, item.title), info);
+  if (item.description) layout.append(renderDescription(item.description));
   const similar = products.filter((other) => other.id !== item.id && other.shape === item.shape);
-  root.append(crumbs, layout, renderDetails(item));
+  root.append(crumbs, layout);
   if (!similar.length) return;
   const grid = createElement('div', 'tile-grid');
   grid.append(...similar.slice(0, 4).map(renderProductTile));
