@@ -85,18 +85,67 @@ function renderDescription(text) {
   return block;
 }
 
-function renderDrawerTrigger(drawer, { iconName, label, heading, buildContent }) {
-  const trigger = createElement('button', 'drawer-trigger');
-  trigger.type = 'button';
-  trigger.append(createIcon(iconName), createElement('span', 'drawer-trigger-label', label), createIcon('chevron-right'));
-  trigger.addEventListener('click', () => drawer.open(heading, buildContent()));
-  return trigger;
+const KEY_SPEC_LABELS = ['Серия', 'Цвет фасада', 'Цвет корпуса', 'Материал фасада'];
+const KIT_PATTERN = /комплекте|отдельно/i;
+const INCLUDED_PATTERN = /комплекте/i;
+
+function readSpecValue(item, label) {
+  return item.specs?.find((spec) => spec.label === label)?.value ?? null;
 }
 
-function renderDrawerTriggers(item, drawer) {
-  const triggers = createElement('div', 'drawer-triggers');
-  triggers.append(renderDrawerTrigger(drawer, { iconName: 'list', label: 'Характеристики', heading: 'Характеристики', buildContent: () => renderSpecs(item) }));
-  return triggers;
+function renderFactRow(iconName, label, value, valueClass) {
+  const row = createElement('div', 'fact-row');
+  const caption = createElement('span', 'fact-label');
+  caption.append(createIcon(iconName), label);
+  row.append(caption, createElement('span', valueClass ? `fact-value ${valueClass}` : 'fact-value', value));
+  return row;
+}
+
+function renderLinkRow(iconName, label, onClick) {
+  const row = createElement('button', 'link-row');
+  row.type = 'button';
+  row.append(createIcon(iconName), createElement('span', 'link-row-label', label), createIcon('chevron-right'));
+  row.addEventListener('click', onClick);
+  return row;
+}
+
+function renderTitleCard(item) {
+  const card = createElement('div', 'info-card');
+  card.append(createElement('h1', 'product-title', item.title));
+  if (item.sku) card.append(createElement('span', 'product-code', `Артикул: ${item.sku}`));
+  return card;
+}
+
+function renderPriceCard(item, orderBar) {
+  const card = createElement('div', 'info-card price-card');
+  card.append(createElement('div', 'product-price', formatPrice(item.price)), orderBar);
+  return card;
+}
+
+function renderKeySpecsCard(item, drawer) {
+  const card = createElement('div', 'info-card');
+  const facts = [['Размер', item.size], ...KEY_SPEC_LABELS.map((label) => [label, readSpecValue(item, label)])].filter(([, value]) => value);
+  facts.forEach(([label, value]) => card.append(renderFactRow(SPEC_ICONS[label] ?? 'info', label, value)));
+  card.append(renderLinkRow('list', 'Все характеристики', () => drawer.open('Характеристики', renderSpecs(item))));
+  return card;
+}
+
+function renderKitCard(item) {
+  const kit = (item.specs ?? []).filter((spec) => KIT_PATTERN.test(spec.value));
+  if (!kit.length) return null;
+  const card = createElement('div', 'info-card');
+  kit.forEach((spec) => {
+    const isIncluded = INCLUDED_PATTERN.test(spec.value);
+    card.append(renderFactRow(isIncluded ? 'check' : 'info', spec.label, isIncluded ? 'В комплекте' : 'Отдельно', isIncluded ? 'is-included' : ''));
+  });
+  return card;
+}
+
+function renderReviewsLinkCard(item) {
+  const reviewCount = reviews.filter((review) => review.productId === item.id).length;
+  const card = createElement('div', 'info-card');
+  card.append(renderLinkRow('message-square', reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы', () => document.querySelector('.reviews-section').scrollIntoView({ behavior: 'smooth' })));
+  return card;
 }
 
 function renderReviewsSection(item) {
@@ -122,10 +171,12 @@ function renderProduct(item) {
   crumbs.append(catalogLink, createIcon('chevron-right'), createElement('span', '', item.title));
   const info = createElement('div', 'product-info');
   const order = createWhatsAppLink(site.whatsappPhone, buildProductMessage(item), 'button button-green', 'Заказать');
-  info.append(createElement('h1', 'product-title', item.title), createElement('div', 'product-price', formatPrice(item.price)));
   const orderBar = createElement('div', 'order-bar');
   orderBar.append(order);
-  info.append(orderBar, renderDrawerTriggers(item, createDrawer()));
+  info.append(renderTitleCard(item), renderPriceCard(item, orderBar), renderKeySpecsCard(item, createDrawer()));
+  const kitCard = renderKitCard(item);
+  if (kitCard) info.append(kitCard);
+  info.append(renderReviewsLinkCard(item));
   document.body.classList.add('has-order-bar');
   const layout = createElement('div', 'product-layout');
   layout.append(renderGallery(item.images, item.title), info);

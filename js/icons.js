@@ -28,6 +28,7 @@ const ICON_BODIES = {
   clock: '<circle class="f" cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   'shield-check': '<path class="f" d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/>',
   tag: '<path class="f" d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/>',
+  check: '<circle class="f" cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/>',
   info: '<circle class="f" cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',
 };
 
