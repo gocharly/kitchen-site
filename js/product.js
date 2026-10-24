@@ -145,13 +145,6 @@ function renderKitCard(item) {
   return card;
 }
 
-function renderReviewsLinkCard(item) {
-  const reviewCount = reviews.filter((review) => review.productId === item.id).length;
-  const card = createElement('div', 'info-card');
-  card.append(renderLinkRow('message-square', reviewCount ? `Отзывы (${reviewCount})` : 'Отзывы', () => document.querySelector('.reviews-section').scrollIntoView({ behavior: 'smooth' })));
-  return card;
-}
-
 function renderReviewsSection(item) {
   const reviewCount = reviews.filter((review) => review.productId === item.id).length;
   const section = createElement('section', 'reviews-section');
@@ -180,7 +173,6 @@ function renderProduct(item) {
   info.append(renderTitleCard(item), renderPriceCard(item, orderBar), renderKeySpecsCard(item, createDrawer()));
   const kitCard = renderKitCard(item);
   if (kitCard) info.append(kitCard);
-  info.append(renderReviewsLinkCard(item));
   document.body.classList.add('has-order-bar');
   const layout = createElement('div', 'product-layout');
   layout.append(renderGallery(item.images, item.title), info);
