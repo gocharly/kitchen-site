@@ -144,9 +144,22 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
 
 /* footer */
 .site-footer { margin-top: 64px; padding: 40px var(--gutter) 24px; background: var(--surface); }
-.footer-columns { max-width: var(--max); margin: 0 auto; display: flex; flex-wrap: wrap; gap: 40px; font-size: 13px; }
+.footer-inner { max-width: var(--max); margin: 0 auto; display: grid; gap: 40px; }
+.footer-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; font-size: 14px; }
 .footer-column { display: flex; flex-direction: column; gap: 2px; }
-.footer-column a { padding: 7px 0; }
+.footer-link { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 0; }
+.footer-count { color: var(--muted); font-size: 12px; }
+.footer-note { margin-top: 6px; color: var(--muted); font-size: 13px; }
+.footer-step { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+.footer-step .icon { width: 20px; height: 20px; color: var(--accent); }
+.footer-brand { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.footer-brand-name { font-size: 20px; font-weight: 600; }
+.footer-brand-text { color: var(--muted); max-width: 360px; font-size: 14px; }
+.footer-brand .button { margin-top: 4px; }
+.footer-bottom { max-width: var(--max); margin: 24px auto 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 13px; }
+.footer-top { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; border-radius: 999px; background: var(--page); color: var(--ink); font-size: 13px; font-weight: 500; transition: transform .2s; }
+.footer-top:hover { transform: scale(1.04); }
+.footer-top .icon { width: 16px; height: 16px; }
 .footer-contact { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
 .footer-contact .icon { width: 18px; height: 18px; color: var(--muted); }
 .footer-heading { color: var(--muted); margin-bottom: 6px; }
@@ -184,6 +197,8 @@ a.contact-value { text-decoration: underline; text-underline-offset: 3px; }
   .spec-card { padding: 12px 28px; }
   .contact-list { max-width: 640px; }
   .site-footer { padding: 56px var(--gutter) 32px; }
+  .footer-inner { grid-template-columns: 1fr 2fr; gap: 56px; }
+  .footer-columns { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
 }
 
 /* page ready gate */

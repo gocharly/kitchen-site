@@ -127,8 +127,15 @@ function renderMobileMenu(site, activePage, closeMenu) {
   return menu;
 }
 
+let productsRequest = null;
+
+function loadProducts() {
+  productsRequest ??= fetchJson('data/products.json').then((catalog) => catalog.products);
+  return productsRequest;
+}
+
 async function hideEmptyShapeLinks(menu) {
-  const { products } = await fetchJson('data/products.json');
+  const products = await loadProducts();
   const presentShapes = new Set(products.map((product) => product.shape));
   menu.querySelectorAll('[data-shape]').forEach((link) => {
     if (!presentShapes.has(link.dataset.shape)) link.remove();
@@ -179,22 +186,65 @@ function renderFooterContact(iconName, value) {
   return row;
 }
 
+function renderFooterColumn(heading, rows) {
+  const column = createElement('div', 'footer-column');
+  column.append(createElement('span', 'footer-heading', heading), ...rows);
+  return column;
+}
+
+function renderFooterLink(href, label, count) {
+  const link = createElement('a', 'footer-link', label);
+  link.href = href;
+  if (count !== undefined) link.append(createElement('span', 'footer-count', String(count)));
+  return link;
+}
+
+async function fillFooterCatalog(column) {
+  const products = await loadProducts();
+  const rows = [renderFooterLink('catalog.html', 'Все кухни', products.length)];
+  Object.entries(SHAPE_LABELS).forEach(([shape, label]) => {
+    const count = products.filter((product) => product.shape === shape).length;
+    if (count) rows.push(renderFooterLink(`catalog.html?shape=${shape}`, label, count));
+  });
+  const minPrice = Math.min(...products.map((product) => product.price));
+  column.append(...rows, createElement('span', 'footer-note', `Цены от ${formatPrice(minPrice)}`));
+}
+
+function renderFooterSteps() {
+  return ORDER_STEPS.map((step) => {
+    const row = createElement('span', 'footer-step');
+    row.append(createIcon(step.icon), step.title);
+    return row;
+  });
+}
+
+function renderFooterBrand(site) {
+  const brand = createElement('div', 'footer-brand');
+  brand.append(createElement('span', 'footer-brand-name', site.name), createElement('p', 'footer-brand-text', 'Готовые кухни с ценой, размерами и комплектацией. Заказ и вопросы в WhatsApp.'), createWhatsAppLink(site.whatsappPhone, GENERAL_MESSAGE, 'button button-green', 'Написать в WhatsApp'));
+  return brand;
+}
+
+function renderFooterBottom(site) {
+  const bottom = createElement('div', 'footer-bottom');
+  const toTop = createElement('button', 'footer-top', 'Наверх');
+  toTop.type = 'button';
+  toTop.append(createIcon('arrow-up'));
+  toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  bottom.append(createElement('span', '', `© ${new Date().getFullYear()} ${site.name}`), toTop);
+  return bottom;
+}
+
 function renderFooter(site) {
   const footer = createElement('footer', 'site-footer');
   const columns = createElement('div', 'footer-columns');
-  const menu = createElement('div', 'footer-column');
-  menu.append(createElement('span', 'footer-heading', 'Меню'));
-  NAV_ITEMS.forEach((item) => {
-    const link = createElement('a', '', item.label);
-    link.href = item.href;
-    menu.append(link);
-  });
-  columns.append(menu);
-  const contacts = createElement('div', 'footer-column');
-  contacts.append(createElement('span', 'footer-heading', 'Контакты'));
-  [['phone', site.phone], ['mail', site.email], ['map-pin', site.address]].filter(([, value]) => value).forEach(([iconName, value]) => contacts.append(renderFooterContact(iconName, value)));
-  if (contacts.children.length > 1) columns.append(contacts);
-  footer.append(columns, createElement('div', 'footer-wordmark', site.name));
+  const catalog = renderFooterColumn('Каталог', []);
+  fillFooterCatalog(catalog);
+  columns.append(renderFooterColumn('Меню', NAV_ITEMS.map((item) => renderFooterLink(item.href, item.label))), catalog, renderFooterColumn('Как заказать', renderFooterSteps()));
+  const contactRows = [['phone', site.phone], ['mail', site.email], ['map-pin', site.address]].filter(([, value]) => value).map(([iconName, value]) => renderFooterContact(iconName, value));
+  if (contactRows.length) columns.append(renderFooterColumn('Контакты', contactRows));
+  const inner = createElement('div', 'footer-inner');
+  inner.append(renderFooterBrand(site), columns);
+  footer.append(inner, createElement('div', 'footer-wordmark', site.name), renderFooterBottom(site));
   return footer;
 }
 

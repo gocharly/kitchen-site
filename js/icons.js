@@ -5,6 +5,7 @@ const ICON_BODIES = {
   menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
   close: '<path d="M6 6l12 12M18 6L6 18"/>',
   'arrow-right': '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  'arrow-up': '<path d="M12 19V5M6 11l6-6 6 6"/>',
   'arrow-up-right': '<path d="M7 17L17 7M8 7h9v9"/>',
   'chevron-left': '<path d="M15 6l-6 6 6 6"/>',
   'chevron-right': '<path d="M9 6l6 6-6 6"/>',
